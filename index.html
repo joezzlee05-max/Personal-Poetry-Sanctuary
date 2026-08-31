@@ -71,26 +71,31 @@
         </div>
       </div>
 
-<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 flex flex-wrap justify-center items-end gap-x-3 gap-y-6 no-scrollbar">
+<!-- 1. 严格使用 Grid 4 列网格，保证 1、2、3、4 列左右上下绝对对齐 -->
+<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-2.5 gap-y-6 items-end no-scrollbar">
   <div 
-    v-for="(poem, index) in filteredPoems" 
+    v-for="poem in filteredPoems" 
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
-      'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible',
-      poem.span === 2 ? 'w-[33%]' : 'w-[21.5%]',
-      /* 
-        index === 4 是第二排第一个《春·意义》，往左往外推一点 (-ml-2)
-        index === 6 是第二排第三个《茶无上品》，往右往外推一点 (-mr-2)
-      */
-      index === 4 ? '-ml-2' : '',
-      index === 6 ? '-mr-2' : ''
+      'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible w-full h-full',
+      poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
+    <!-- 普通单列卡片：按照满意的大小渲染 -->
     <img 
+      v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
       class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform" 
+    />
+
+    <!-- Poem for Two 专属：严格限高并保持底对齐，白框会自动匹配高度且不溢出 -->
+    <img 
+      v-else
+      :src="poem.image" 
+      :alt="poem.title" 
+      class="max-w-full max-h-full w-auto h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform object-contain" 
     />
   </div>
 </div>
