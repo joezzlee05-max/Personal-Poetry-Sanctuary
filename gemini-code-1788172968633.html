@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Poetry Sanctuary | 诗歌图鉴</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { background-color: #121212; font-family: 'Noto Serif SC', serif; }
+    .font-retro { font-family: 'Cinzel', serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    /* 点击卡片时的微缩反馈 */
+    .polaroid-png {
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .polaroid-png:active { transform: scale(0.93); opacity: 0.9; }
+  </style>
+</head>
+<body class="flex justify-center items-center min-h-screen">
+
+  <div id="app" class="w-full max-w-md bg-[#f4f4f5] h-screen relative overflow-hidden shadow-2xl flex flex-col">
+    
+    <!-- 1. 主界面 -->
+    <main v-if="currentPage === 'home'" class="relative w-full h-full flex flex-col justify-between overflow-hidden bg-[#121212]">
+      <div class="absolute inset-0 opacity-80 z-0">
+        <img src="https://placehold.co/800x1200/222222/c8aa6e?text=Latest+Peg-Doll+Figure" class="w-full h-full object-cover" />
+      </div>
+      <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-[#121212] z-10"></div>
+      
+      <div class="relative z-20 p-6 flex justify-between items-start text-[#c8aa6e]">
+        <div>
+          <p class="font-retro text-sm tracking-widest">LV. 70</p>
+          <p class="text-xs opacity-70 tracking-widest">ID: 19 Z 1</p>
+        </div>
+        <div class="font-retro text-xl tracking-[0.2em] font-bold text-right">POETRY<br>SANCTUARY</div>
+      </div>
+
+      <div class="relative z-20 p-6 pb-16 flex flex-col items-end space-y-4">
+        <div class="w-full text-right mb-2">
+          <p class="font-retro text-[#c8aa6e] text-lg tracking-widest border-b border-[#c8aa6e]/30 pb-1 inline-block">THE SHOW</p>
+        </div>
+        <button @click="currentPage = 'gallery'" class="w-48 bg-black/60 border border-[#c8aa6e] backdrop-blur-sm p-3 flex justify-between items-center text-gray-200 text-sm tracking-widest cursor-pointer">
+          <span>诗歌图鉴</span>
+          <span class="font-retro text-[#c8aa6e] font-bold">ENTER →</span>
+        </button>
+        <button class="w-40 bg-black/40 border border-gray-500/50 backdrop-blur-sm p-2 flex justify-between items-center text-gray-400 text-xs tracking-widest">
+          <span>关于作者</span>
+          <span class="font-retro">ABOUT</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- 2. 图鉴页面 -->
+    <section v-else-if="currentPage === 'gallery'" class="w-full h-full bg-[#f4f4f5] flex flex-col overflow-hidden">
+      <!-- 顶栏 -->
+      <div class="bg-[#121212] text-white p-3.5 px-4 flex justify-between items-center shrink-0 shadow-md">
+        <button @click="currentPage = 'home'" class="text-xs text-[#c8aa6e] font-bold cursor-pointer">← 返回主页</button>
+        <div class="flex items-center gap-3">
+          <div class="text-right">
+            <span class="font-retro text-xs tracking-widest text-[#c8aa6e] block">GALLERY</span>
+            <span class="text-[10px] text-gray-400 block truncate max-w-[120px]">{{ activeCategory }} ({{ filteredPoems.length }})</span>
+          </div>
+          <button @click="isFilterOpen = true" class="w-8 h-8 rounded border border-[#c8aa6e]/40 bg-black/50 text-[#c8aa6e] flex items-center justify-center cursor-pointer">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 破框 PNG 专用网格 -->
+      <div class="flex-1 overflow-y-auto p-2 grid grid-cols-4 gap-x-1 gap-y-3 no-scrollbar pb-16">
+        <div 
+          v-for="poem in filteredPoems" 
+          :key="poem.id"
+          @click="openModal(poem)"
+          class="polaroid-png cursor-pointer h-fit w-full flex items-center justify-center"
+        >
+          <!-- drop-shadow-md 滤镜会沿着透明 PNG 的真实轮廓（含破框部分）投射阴影 -->
+          <img 
+            :src="poem.image" 
+            :alt="poem.title" 
+            class="w-full h-auto block drop-shadow-md select-none pointer-events-none" 
+          />
+        </div>
+      </div>
+
+      <!-- 分类抽屉 (Filter) -->
+      <div v-if="isFilterOpen" class="absolute inset-0 bg-black/60 z-30" @click="isFilterOpen = false"></div>
+      <div v-if="isFilterOpen" class="absolute bottom-0 left-0 right-0 bg-[#1a1a1a] text-white z-40 rounded-t-2xl p-5 border-t border-[#c8aa6e]/30 max-h-[75vh] flex flex-col">
+        <div class="flex justify-between items-center border-b border-gray-800 pb-3 mb-4">
+          <span class="font-retro text-sm text-[#c8aa6e] font-bold">SELECT CATEGORY</span>
+          <button @click="isFilterOpen = false" class="text-gray-400 text-xs">✕ 关闭</button>
+        </div>
+        <div class="overflow-y-auto space-y-2 no-scrollbar pr-1 pb-4">
+          <button 
+            v-for="cat in categories" 
+            :key="cat"
+            @click="activeCategory = cat; isFilterOpen = false;"
+            :class="['w-full text-left px-4 py-2.5 rounded-lg text-xs font-bold flex justify-between items-center cursor-pointer', activeCategory === cat ? 'bg-[#c8aa6e] text-black font-bold' : 'bg-white/5 text-gray-300']"
+          >
+            <span>{{ cat }}</span>
+            <span v-if="activeCategory === cat">✓</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 诗歌阅读弹窗 -->
+    <div v-if="selectedPoem" class="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-xs">
+      <div class="bg-[#fefdfb] w-full max-w-md h-[85vh] rounded-t-2xl flex flex-col overflow-hidden relative">
+        <div class="p-4 flex justify-between items-center bg-black/80 text-white">
+          <span class="text-xs font-bold text-[#c8aa6e]">{{ selectedPoem.category }}</span>
+          <button @click="selectedPoem = null" class="w-7 h-7 rounded-full bg-white/20 text-white text-xs font-bold cursor-pointer">✕</button>
+        </div>
+        
+        <!-- 弹窗顶部展示完整的破框拍立得 PNG -->
+        <div class="w-full h-1/2 bg-gray-100 flex items-center justify-center p-4">
+          <img :src="selectedPoem.image" class="h-full w-auto object-contain drop-shadow-xl" />
+        </div>
+        
+        <!-- 诗歌正文 -->
+        <div class="flex-1 overflow-y-auto p-6 no-scrollbar border-t border-gray-100">
+          <h2 class="text-xl font-bold text-gray-900 mb-6 text-center">《{{ selectedPoem.title }}》</h2>
+          <div class="text-gray-700 leading-loose text-sm whitespace-pre-wrap text-center">{{ selectedPoem.content }}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+      setup() {
+        const currentPage = ref('home');
+        const isFilterOpen = ref(false);
+        const activeCategory = ref('2025 - 缘起鹊桥');
+        const selectedPoem = ref(null);
+
+        const categories = [
+          '全部', '愚者之旅', '2026 - 时隙悬园', '2025 - 缘起鹊桥', '2024 - 余韵高台',
+          '2023 - 旧忆长廊', '2022 - 馨香大殿', '2021 - 流光长廊', '2020 - 瑰梦序厅',
+          '新春特辑系列', '中秋特辑系列', '圣诞特辑系列', '心理学原创系列', '世时雨系列'
+        ];
+
+        // 替换为你的 20 张透明底 PNG 拍立得直链
+        const poems = ref([
+          { id: 1, title: '初言', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=初言+PNG', content: '《初言》诗歌正文...' },
+          { id: 2, title: '像朋友一样亲切', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=像朋友一样亲切+PNG', content: '《像朋友一样亲切》诗歌正文...' },
+          { id: 3, title: '愚者谏言', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=愚者谏言+PNG', content: '《愚者谏言》诗歌正文...' },
+          { id: 4, title: '海的王子', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=海的王子+PNG', content: '《海的王子》诗歌正文...' },
+          { id: 5, title: '上头', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=上头+PNG', content: '《上头》诗歌正文...' },
+          { id: 6, title: '泡面需要三分钟', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=泡面需要三分钟+PNG', content: '《泡面需要三分钟》诗歌正文...' },
+          { id: 7, title: 'Stop Sugar', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=Stop+Sugar+PNG', content: '《Stop Sugar》诗歌正文...' },
+          { id: 8, title: '范', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=范+PNG', content: '《范》诗歌正文...' },
+          { id: 9, title: '阿卡贝拉', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=阿卡贝拉+PNG', content: '《阿卡贝拉》诗歌正文...' },
+          { id: 10, title: 'Dear LLL', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=Dear+LLL+PNG', content: '《Dear LLL》诗歌正文...' },
+          { id: 11, title: '大娱乐至上', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=大娱乐至上+PNG', content: '《大娱乐至上》诗歌正文...' },
+          { id: 12, title: '轻的誓词', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=轻的誓词+PNG', content: '《轻的誓词》诗歌正文...' },
+          { id: 13, title: '百梦成章', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=百梦成章+PNG', content: '《百梦成章》诗歌正文...' },
+          { id: 14, title: '修剪艺术', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=修剪艺术+PNG', content: '《修剪艺术》诗歌正文...' },
+          { id: 15, title: '第三次信任', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=第三次信任+PNG', content: '《第三次信任》诗歌正文...' },
+          { id: 16, title: '迷途知返', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=迷途知返+PNG', content: '《迷途知返》诗歌正文...' },
+          { id: 17, title: '凡勃伦效应', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=凡勃伦效应+PNG', content: '《凡勃伦效应》诗歌正文...' },
+          { id: 18, title: '贝勃规律', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=贝勃规律+PNG', content: '《贝勃规律》诗歌正文...' },
+          { id: 19, title: '斯德哥尔摩效应', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=斯德哥尔摩效应+PNG', content: '《斯德哥尔摩效应》诗歌正文...' },
+          { id: 20, title: '雪调白', category: '2025 - 缘起鹊桥', image: 'https://placehold.co/300x400/eceeef/333333?text=雪调白+PNG', content: '《雪调白》诗歌正文...' }
+        ]);
+
+        const filteredPoems = computed(() => {
+          if (activeCategory.value === '全部') return poems.value;
+          return poems.value.filter(poem => poem.category === activeCategory.value);
+        });
+
+        const openModal = (poem) => {
+          selectedPoem.value = poem;
+        };
+
+        return {
+          currentPage, isFilterOpen, categories, activeCategory,
+          poems, filteredPoems, selectedPoem, openModal
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
