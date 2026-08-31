@@ -71,20 +71,21 @@
         </div>
       </div>
 
-<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-2.5 gap-y-4 items-end no-scrollbar">
+<!-- 使用 flex 替代 grid，让卡片按实际 1.5 倍宽度自由并排 -->
+<div class="flex-1 overflow-y-auto px-8 pt-6 pb-16 flex flex-wrap justify-between items-end gap-y-6 no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
       'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible',
-      poem.span === 2 ? 'col-span-2' : 'col-span-1'
+      poem.span === 2 ? 'w-[33%]' : 'w-[22%]'
     ]"
   >
     <img 
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none" 
     />
   </div>
 </div>
