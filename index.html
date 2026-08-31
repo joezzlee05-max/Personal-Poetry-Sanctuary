@@ -71,9 +71,7 @@
         </div>
       </div>
 
-<!-- 1. px-6：增加外边距，防止第一张和第四张靠边过近 -->
-<!-- 2. gap-x-2：关键点！增加横向间距，用来撑开 scale 放大后的卡片，防止重叠 -->
-<div class="flex-1 overflow-y-auto px-6 py-2 grid grid-cols-4 gap-x-2 gap-y-4 items-end no-scrollbar pb-16">
+<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-2.5 gap-y-4 items-end no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
@@ -83,7 +81,6 @@
       poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
-    <!-- 保持 scale-125 放大和 origin-bottom，但将 -mx-4 这种激进的负边距删掉 -->
     <img 
       :src="poem.image" 
       :alt="poem.title" 
