@@ -71,31 +71,22 @@
         </div>
       </div>
 
-<!-- 恢复之前最满意的 Grid 4 列布局 + 间距/边距参数 -->
-<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-2.5 gap-y-4 items-end no-scrollbar">
+<!-- 使用 flex 布局，px-6 pt-8 pb-16 保持留空与顶边距离，gap-y-6 控制上下排间距 -->
+<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 flex flex-wrap justify-center items-end gap-x-3 gap-y-6 no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
       'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible',
-      poem.span === 2 ? 'col-span-2' : 'col-span-1'
+      /* 普通卡片占 21.5%（一行刚好放4张），Poem for Two 占 33%（刚好是 1.5 倍宽） */
+      poem.span === 2 ? 'w-[33%]' : 'w-[21.5%]'
     ]"
   >
-    <!-- 1. 普通单列拍立得：保持你之前满意的 scale-125 大小 -->
     <img 
-      v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
       class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform" 
-    />
-
-    <!-- 2. Poem for Two：占 2 格保证排版，但用 -mx-6 负边距收紧宽度，白框高度即可与其他三张完美对齐！ -->
-    <img 
-      v-else
-      :src="poem.image" 
-      :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform -mx-6" 
     />
   </div>
 </div>
