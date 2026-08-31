@@ -82,10 +82,13 @@
     ]"
   >
     <img 
-      :src="poem.image" 
-      :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform" 
-    />
+  :src="poem.image" 
+  :alt="poem.title" 
+  :class="[
+    'h-auto block drop-shadow-md select-none pointer-events-none origin-bottom transform',
+    poem.span === 2 ? 'w-[96%] scale-[1.12] mx-auto' : 'w-full scale-125'
+  ]" 
+/>
   </div>
 </div>
 
