@@ -71,18 +71,18 @@
         </div>
       </div>
 
-<!-- 1. 严格使用 Grid 4 列网格，保证 1、2、3、4 列左右上下绝对对齐 -->
+<!-- 保持 4 列网格，两边和上下间距精准控制 -->
 <div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-2.5 gap-y-6 items-end no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
-      'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible w-full h-full',
+      'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible',
       poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
-    <!-- 普通单列卡片：按照满意的大小渲染 -->
+    <!-- 普通单列卡片：继续保持你满意的 scale-125 尺寸 -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
@@ -90,12 +90,12 @@
       class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform" 
     />
 
-    <!-- Poem for Two 专属：严格限高并保持底对齐，白框会自动匹配高度且不溢出 -->
+    <!-- Poem for Two 专属：取消 scale-125，用 scale-[0.88] 精准降高，彻底与左右两张白框对齐！ -->
     <img 
       v-else
       :src="poem.image" 
       :alt="poem.title" 
-      class="max-w-full max-h-full w-auto h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform object-contain" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-bottom transform" 
     />
   </div>
 </div>
