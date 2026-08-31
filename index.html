@@ -71,7 +71,8 @@
         </div>
       </div>
 
-<div class="flex-1 overflow-y-auto px-6 py-2 grid grid-cols-4 gap-x-0 gap-y-4 items-end no-scrollbar pb-16">
+<!-- 1. px-8 确保两边留足空间，gap-x-0 消除默认间距 -->
+<div class="flex-1 overflow-y-auto px-8 py-2 grid grid-cols-4 gap-x-0 gap-y-4 items-end no-scrollbar pb-16">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
@@ -81,10 +82,11 @@
       poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
+    <!-- 2. -mx-1.5 利用负外边距让拍立得左右互相拉近、更加紧凑 -->
     <img 
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none -mx-1.5" 
     />
   </div>
 </div>
