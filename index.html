@@ -71,19 +71,19 @@
         </div>
       </div>
 
-      <!-- 破框 PNG 专用网格 -->
-      <div class="flex-1 overflow-y-auto p-2 grid grid-cols-4 gap-x-1 gap-y-3 no-scrollbar pb-16">
+      <!-- 破框 PNG 专用网格：items-end 确保所有卡片的拍立得底框在同一水平线上 -->
+      <div class="flex-1 overflow-y-auto p-2 grid grid-cols-4 gap-x-1 gap-y-4 items-end no-scrollbar pb-16">
         <div 
           v-for="poem in filteredPoems" 
           :key="poem.id"
           @click="openModal(poem)"
-          class="polaroid-png cursor-pointer h-fit w-full flex items-center justify-center"
+          class="polaroid-png cursor-pointer w-full flex items-end justify-center relative overflow-visible"
         >
           <!-- drop-shadow-md 滤镜会沿着透明 PNG 的真实轮廓（含破框部分）投射阴影 -->
           <img 
             :src="poem.image" 
             :alt="poem.title" 
-            class="w-full h-auto block drop-shadow-md select-none pointer-events-none" 
+            class="w-full h-auto block drop-shadow-md select-none pointer-events-none overflow-visible" 
           />
         </div>
       </div>
