@@ -71,7 +71,7 @@
         </div>
       </div>
 
-<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-2.5 gap-y-4 items-end no-scrollbar">
+<div class="flex-1 overflow-y-auto px-8 pt-8 pb-16 grid grid-cols-4 gap-x-2 gap-y-6 items-end no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
@@ -81,14 +81,21 @@
       poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
+    <!-- 普通单列卡片：正常满格显示 -->
     <img 
-  :src="poem.image" 
-  :alt="poem.title" 
-  :class="[
-    'h-auto block drop-shadow-md select-none pointer-events-none origin-bottom transform',
-    poem.span === 2 ? 'w-[96%] scale-[1.12] mx-auto' : 'w-full scale-125'
-  ]" 
-/>
+      v-if="poem.span !== 2"
+      :src="poem.image" 
+      :alt="poem.title" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none -mx-1.5" 
+    />
+
+    <!-- 《Poem for Two》专属：通过 w-[105%] 微调宽度，强行拉高它的白框至标准高度 -->
+    <img 
+      v-else
+      :src="poem.image" 
+      :alt="poem.title" 
+      class="w-[105%] max-w-none h-auto block drop-shadow-md select-none pointer-events-none -mx-2" 
+    />
   </div>
 </div>
 
