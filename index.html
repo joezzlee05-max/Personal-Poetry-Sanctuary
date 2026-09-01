@@ -81,20 +81,20 @@
       poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
-    <!-- 普通单列卡片：保持你当前完美的 1-2 排和 3-4 排间距 -->
+    <!-- 普通单列卡片：使用任意值语法 -mb-[56px] (对应 -mb-14) -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform -mb-14" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform -mb-[56px]" 
     />
 
-    <!-- Poem for Two 专属：单独开大到 -mb-38，把 2-3 排的大缝隙强行吃掉 -->
+    <!-- Poem for Two 专属：强制使用任意像素值 -mb-[150px]，直接把 2-3 排的大缝隙硬拉上来 -->
     <img 
       v-else
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform -mb-38" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform -mb-[150px]" 
     />
   </div>
 </div>
