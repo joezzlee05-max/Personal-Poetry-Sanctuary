@@ -71,7 +71,8 @@
         </div>
       </div>
 
-<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-3 gap-y-5 items-start no-scrollbar">
+<!-- 将 pt-8 改为 pt-2（或 pt-3），即可完美缩小第一排与顶部导航栏的间距 -->
+<div class="flex-1 overflow-y-auto px-6 pt-2 pb-16 grid grid-cols-4 gap-x-3 gap-y-5 items-start no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
@@ -89,7 +90,7 @@
       class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform" 
     />
 
-    <!-- Poem for Two 专属：加上 -mb-5，干掉底部死角空间，强行拉近与第 3 排的间距 -->
+    <!-- Poem for Two 专属 -->
     <img 
       v-else
       :src="poem.image" 
