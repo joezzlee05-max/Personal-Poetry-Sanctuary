@@ -71,11 +71,6 @@
         </div>
       </div>
 
-<!-- 
-  1. 使用 grid grid-cols-4 锁定 4 列
-  2. 关键：items-start (顶部对齐)，彻底防止插花/挂件向上撑开第 3-4 排的间距
-  3. gap-y-5 控制你满意的上下垂直间距
--->
 <div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-3 gap-y-5 items-start no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
@@ -86,7 +81,7 @@
       poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
-    <!-- 普通单列卡片：origin-top 搭配 top 对齐 -->
+    <!-- 普通单列卡片 -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
@@ -94,12 +89,12 @@
       class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform" 
     />
 
-    <!-- Poem for Two 专属卡片 -->
+    <!-- Poem for Two 专属：加上 -mb-5，干掉底部死角空间，强行拉近与第 3 排的间距 -->
     <img 
       v-else
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform -mb-5" 
     />
   </div>
 </div>
