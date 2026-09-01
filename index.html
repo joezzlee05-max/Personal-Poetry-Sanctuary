@@ -81,7 +81,7 @@
       poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
-    <!-- 普通单列卡片：加上 -mb-8 (或 -mb-10) 强制消除 scale 带来的多余 DOM 高度 -->
+    <!-- 普通单列卡片：保持你满意的 -mb-20 -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
@@ -89,12 +89,12 @@
       class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform -mb-20" 
     />
 
-    <!-- Poem for Two 专属：负边距加大到 -mb-16，保证与单列排的间距绝对一致 -->
+    <!-- Poem for Two 专属：同步加大到 -mb-28，彻底拉近 2-3 排的间距 -->
     <img 
       v-else
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform -mb-16" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform -mb-28" 
     />
   </div>
 </div>
