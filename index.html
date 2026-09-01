@@ -71,8 +71,8 @@
         </div>
       </div>
 
-<!-- 保持 4 列网格，两边和上下间距精准控制 -->
-<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-2.5 gap-y-6 items-end no-scrollbar">
+<!-- 将 gap-y-6 改为 gap-y-1，精准收紧并固定所有行之间的纵向间距 -->
+<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-2.5 gap-y-1 items-end no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
@@ -82,15 +82,12 @@
       poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
-    <!-- 普通单列卡片：继续保持你满意的 scale-125 尺寸 -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
       class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform" 
     />
-
-    <!-- Poem for Two 专属：取消 scale-125，用 scale-[0.88] 精准降高，彻底与左右两张白框对齐！ -->
     <img 
       v-else
       :src="poem.image" 
