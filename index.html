@@ -71,30 +71,31 @@
         </div>
       </div>
 
-<div class="flex-1 overflow-y-auto px-6 pt-2 pb-16 grid grid-cols-4 gap-x-3 items-start no-scrollbar">
+<div class="flex-1 overflow-y-auto px-6 pt-2 pb-16 grid grid-cols-4 gap-x-3 gap-y-2 items-start no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
-      'polaroid-png cursor-pointer flex items-start justify-center relative overflow-visible',
+      /* 核心修改：强制写死容器的高度为 h-[160px]，无论图片多高，DOM 盒子一律只占 160px 空间 */
+      'polaroid-png cursor-pointer flex items-start justify-center relative overflow-hidden h-[160px]',
       poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
-    <!-- 普通单列卡片：从 -mb-20 加大到 -mb-28，进一步向上拉紧行距 -->
+    <!-- 普通单列卡片：不再使用 -mb 负边距 -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform -mb-32" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform" 
     />
 
-    <!-- Poem for Two 专属：按 1.8 倍同步加大到 -mb-48，锁定 2-3 排联动间距 -->
+    <!-- Poem for Two 专属 -->
     <img 
       v-else
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform -mb-56" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform" 
     />
   </div>
 </div>
