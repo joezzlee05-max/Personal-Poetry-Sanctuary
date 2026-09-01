@@ -71,23 +71,28 @@
         </div>
       </div>
 
-<!-- 将 gap-y-6 改为 gap-y-1，精准收紧并固定所有行之间的纵向间距 -->
+<!-- 1. gap-y-0 消除网格基础纵向间距 -->
 <div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-2.5 gap-y-0 items-end no-scrollbar">
   <div 
-    v-for="poem in filteredPoems" 
+    v-for="(poem, index) in filteredPoems" 
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
       'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible',
-      poem.span === 2 ? 'col-span-2' : 'col-span-1'
+      poem.span === 2 ? 'col-span-2' : 'col-span-1',
+      /* 2. 从第二排开始（index >= 4），强制使用 -mt-6 或 -mt-8 向上拉近，填补 DOM 塌陷区域 */
+      index >= 4 ? '-mt-8' : ''
     ]"
   >
+    <!-- 普通单列卡片 -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
       class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform" 
     />
+
+    <!-- Poem for Two 专属 -->
     <img 
       v-else
       :src="poem.image" 
@@ -96,7 +101,6 @@
     />
   </div>
 </div>
-
       <!-- 分类抽屉 (Filter) -->
       <div v-if="isFilterOpen" class="absolute inset-0 bg-black/60 z-30" @click="isFilterOpen = false"></div>
       <div v-if="isFilterOpen" class="absolute bottom-0 left-0 right-0 bg-[#1a1a1a] text-white z-40 rounded-t-2xl p-5 border-t border-[#c8aa6e]/30 max-h-[75vh] flex flex-col">
