@@ -71,8 +71,7 @@
         </div>
       </div>
 
-<!-- 在外层网格加入 grid-auto-rows-[180px] 直接限制每一排的物理行高 -->
-<div class="flex-1 overflow-y-auto px-6 pt-2 pb-16 grid grid-cols-4 grid-auto-rows-[180px] gap-x-3 items-start no-scrollbar">
+<div class="flex-1 overflow-y-auto px-6 pt-2 pb-16 grid grid-cols-4 gap-x-3 items-start no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
@@ -82,20 +81,20 @@
       poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
-    <!-- 普通单列卡片：不再需要任何 -mb 负边距 -->
+    <!-- 普通单列卡片：保持你调好的 -mb-[170px] 高密度间距 -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform -mb-[170px]" 
     />
 
-    <!-- Poem for Two 专属：同样不需要 -mb -->
+    <!-- Poem for Two 专属：直接下重手 -mb-[320px]，把撑大第 2 排的透明底死角瞬间干掉 -->
     <img 
       v-else
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform -mb-[320px]" 
     />
   </div>
 </div>
