@@ -71,31 +71,33 @@
         </div>
       </div>
 
-<div class="flex-1 overflow-y-auto px-6 pt-2 pb-16 grid grid-cols-4 gap-x-3 items-start no-scrollbar">
+<div class="flex-1 overflow-y-auto px-6 pt-2 pb-16 grid grid-cols-4 gap-x-3 gap-y-2 items-start no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
-      'polaroid-png cursor-pointer flex items-start justify-center relative overflow-visible',
-      poem.span === 2 ? 'col-span-2 -mb-[80px]' : 'col-span-1 -mb-[30px]'
+      'polaroid-png cursor-pointer relative overflow-visible h-0 w-full',
+      /* 强制写死容器的高度比例（针对拍立得长宽比）：普通卡片 125% 比例高度，双倍卡片 62.5% 比例高度 */
+      poem.span === 2 ? 'col-span-2 pb-[62.5%]' : 'col-span-1 pb-[125%]'
     ]"
   >
-    <!-- 普通单列卡片 -->
-    <img 
-      v-if="poem.span !== 2"
-      :src="poem.image" 
-      :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform" 
-    />
+    <!-- 卡片内容容器：绝对定位充满，消除 DOM 空间死角 -->
+    <div class="absolute inset-0 flex items-start justify-center">
+      <img 
+        v-if="poem.span !== 2"
+        :src="poem.image" 
+        :alt="poem.title" 
+        class="w-full h-auto block drop-shadow-md select-none pointer-events-none transform scale-125 origin-top" 
+      />
 
-    <!-- Poem for Two 专属 -->
-    <img 
-      v-else
-      :src="poem.image" 
-      :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform" 
-    />
+      <img 
+        v-else
+        :src="poem.image" 
+        :alt="poem.title" 
+        class="w-full h-auto block drop-shadow-md select-none pointer-events-none transform scale-[0.88] origin-top" 
+      />
+    </div>
   </div>
 </div>
       
