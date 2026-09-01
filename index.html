@@ -81,20 +81,20 @@
       poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
-    <!-- 普通单列卡片：保持你调好的 -mb-[170px] 高密度间距 -->
+    <!-- 普通单列卡片：从 -mb-[170px] 大幅收紧到 -mb-[240px] -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform -mb-[170px]" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform -mb-[240px]" 
     />
 
-    <!-- Poem for Two 专属：直接下重手 -mb-[320px]，把撑大第 2 排的透明底死角瞬间干掉 -->
+    <!-- Poem for Two 专属：同步收紧到 -mb-[390px]，保持全页平齐缩小一倍 -->
     <img 
       v-else
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform -mb-[320px]" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform -mb-[390px]" 
     />
   </div>
 </div>
