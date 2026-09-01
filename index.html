@@ -71,28 +71,27 @@
         </div>
       </div>
 
-<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-2.5 gap-y-0 items-end no-scrollbar">
+<!-- 1. 使用 gap-y-4 统一控制所有排之间的固定垂直间距 -->
+<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-2.5 gap-y-4 items-end no-scrollbar">
   <div 
-    v-for="(poem, index) in filteredPoems" 
+    v-for="poem in filteredPoems" 
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
-      'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible',
-      poem.span === 2 ? 'col-span-2' : 'col-span-1',
-      /* 
-        index 4..6 (第二排)：需要 -mt-8 大幅向上填补第一排留下的死角
-        index >= 7 (第三排及以后)：只需 -mt-2 微调，防止重叠
-      */
-      index >= 4 && index <= 6 ? '-mt-8' : '',
-      index >= 7 ? '-mt-0' : ''
+      /* 2. 关键：h-[220px] 强行统一所有格子的容器高度，彻底抹平第二排的占位落差 */
+      'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible h-[220px]',
+      poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
+    <!-- 普通单列卡片 -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
       class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform" 
     />
+
+    <!-- Poem for Two 专属 -->
     <img 
       v-else
       :src="poem.image" 
