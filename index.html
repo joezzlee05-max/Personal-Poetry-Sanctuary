@@ -71,25 +71,31 @@
         </div>
       </div>
 
-<!-- 使用 flex wrp 布局， justify-between 保证两端对齐，gap-y-6 控制完美的上下排间距 -->
-<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 flex flex-wrap justify-between items-end gap-y-6 no-scrollbar">
+<!-- 1. 使用 CSS Grid 强制 4 列，彻底消除最后一排元素不足导致的间距错位 -->
+<div class="flex-1 overflow-y-auto px-6 pt-6 pb-16 grid grid-cols-4 gap-x-2.5 gap-y-2 items-end no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
-      'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible',
-      /* 
-        普通单列卡片占用 22.5% (刚好一行4个)
-        《Poem for Two》占用 34% (刚好是单列的 1.5倍)
-      */
-      poem.span === 2 ? 'w-[34%]' : 'w-[22.5%]'
+      'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible w-full',
+      poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
+    <!-- 普通单列卡片：保持 scale-125 效果，同时配合 margin 微调收紧间距 -->
     <img 
+      v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform -mt-3" 
+    />
+
+    <!-- Poem for Two 专属：宽度与双列卡片平齐，容器同样收紧 -->
+    <img 
+      v-else
+      :src="poem.image" 
+      :alt="poem.title" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-bottom transform -mt-3" 
     />
   </div>
 </div>
