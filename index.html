@@ -72,31 +72,80 @@
       </div>
 
 <template>
-  <!-- 
-    行间距控制：
-    直接修改 gap-y-[x] 即可！
-    当前 gap-y-1 为极紧致间距。想要更紧写 gap-y-0；想稍松一点改 gap-y-3 或 gap-y-4
-  -->
-  <div class="flex-1 overflow-y-auto px-6 pt-2 pb-16 grid grid-cols-4 gap-x-3 gap-y-1 items-start no-scrollbar">
-    <div 
-      v-for="poem in filteredPoems" 
-      :key="poem.id"
-      @click="openModal(poem)"
-      :class="[
-        'polaroid-png cursor-pointer flex items-start justify-center relative overflow-visible',
-        poem.span === 2 ? 'col-span-2' : 'col-span-1'
-      ]"
-    >
-      <!-- 
-        完全移除 scale 缩放！
-        图片 100% 渲染真实 DOM 尺寸，完美适配网格
-      -->
-      <img 
-        :src="poem.image" 
-        :alt="poem.title" 
-        class="w-full h-auto block drop-shadow-md select-none pointer-events-none transform-none" 
-      />
+  <div class="w-full h-full flex flex-col relative">
+    
+    <!-- 1. 主网格区域：使用百分比负边距精细压紧行距，保持 DOM 结构完整 -->
+    <div class="flex-1 overflow-y-auto px-6 pt-2 pb-16 grid grid-cols-4 gap-x-3 items-start no-scrollbar">
+      <div 
+        v-for="poem in filteredPoems" 
+        :key="poem.id"
+        @click="openModal(poem)"
+        :class="[
+          'polaroid-png cursor-pointer flex items-start justify-center relative overflow-visible',
+          poem.span === 2 ? 'col-span-2 -mb-[45%]' : 'col-span-1 -mb-[35%]'
+        ]"
+      >
+        <!-- 普通单列卡片 -->
+        <img 
+          v-if="poem.span !== 2"
+          :src="poem.image" 
+          :alt="poem.title" 
+          class="w-full h-auto block drop-shadow-md select-none pointer-events-none transform scale-125 origin-top" 
+        />
+
+        <!-- Poem for Two 专属卡片 -->
+        <img 
+          v-else
+          :src="poem.image" 
+          :alt="poem.title" 
+          class="w-full h-auto block drop-shadow-md select-none pointer-events-none transform scale-[0.88] origin-top" 
+        />
+      </div>
     </div>
+
+    <!-- 2. Modal 弹窗：使用 v-if="isModalOpen && selectedPoem" 确保数据加载后再渲染 -->
+    <div 
+      v-if="isModalOpen && selectedPoem" 
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+      @click.self="closeModal"
+    >
+      <div class="bg-[#1e1e1e] rounded-2xl w-[90%] max-w-lg overflow-hidden shadow-2xl relative border border-white/10">
+        
+        <!-- Header -->
+        <div class="bg-[#2d2d2d] px-6 py-4 flex items-center justify-between border-b border-white/5">
+          <span class="text-[#d4af37] font-serif text-sm tracking-wide">
+            {{ selectedPoem.category }}
+          </span>
+          <button 
+            @click="closeModal" 
+            class="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition"
+          >
+            ✕
+          </button>
+        </div>
+
+        <!-- Body Image Preview -->
+        <div class="bg-[#e5e5e5] p-6 flex justify-center items-center">
+          <img 
+            :src="selectedPoem.image" 
+            :alt="selectedPoem.title" 
+            class="max-h-[50vh] w-auto object-contain drop-shadow-lg"
+          />
+        </div>
+
+        <!-- Footer Text -->
+        <div class="p-6 text-center bg-[#ffffff] text-[#1a1a1a]">
+          <h3 class="text-xl font-bold font-serif mb-2">
+            《{{ selectedPoem.title }}》
+          </h3>
+          <p class="text-sm text-gray-600 font-serif leading-relaxed whitespace-pre-line">
+            {{ selectedPoem.content }}
+          </p>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </template>
       
