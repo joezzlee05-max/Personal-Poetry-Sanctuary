@@ -71,14 +71,14 @@
         </div>
       </div>
 
-<!-- 使用上一版完美的 Flex 布局，把 gap-y-6 缩减为 gap-y-3，整体垂直间距更紧凑 -->
 <div class="flex-1 overflow-y-auto px-6 pt-6 pb-16 flex flex-wrap justify-between items-end gap-y-5 no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
-      'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible',
+      /* 关键：加上 h-[190px] 锁死 DOM 计算高度，防止插花等溢出挂件撑开第3-4排间距 */
+      'polaroid-png cursor-pointer flex items-end justify-center relative overflow-visible h-[190px]',
       poem.span === 2 ? 'w-[34%]' : 'w-[22.5%]'
     ]"
   >
@@ -88,6 +88,11 @@
       class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-bottom transform" 
     />
   </div>
+
+  <!-- 补位元素，保持最后一排间距稳定 -->
+  <div class="w-[22.5%] h-0 pointer-events-none aria-hidden"></div>
+  <div class="w-[22.5%] h-0 pointer-events-none aria-hidden"></div>
+</div>
 
   <!-- 隐形补位元素：防止最后一排元素不足时被 justify-between 拉开抖动 -->
   <div class="w-[22.5%] h-0 pointer-events-none aria-hidden"></div>
