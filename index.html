@@ -78,23 +78,23 @@
     @click="openModal(poem)"
     :class="[
       'polaroid-png cursor-pointer flex items-start justify-center relative overflow-visible',
-      poem.span === 2 ? 'col-span-2' : 'col-span-1'
+      poem.span === 2 ? 'col-span-2 -mb-[80px]' : 'col-span-1 -mb-[30px]'
     ]"
   >
-    <!-- 普通单列卡片：从 -mb-[170px] 大幅收紧到 -mb-[240px] -->
+    <!-- 普通单列卡片 -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform -mb-[300px]" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform" 
     />
 
-    <!-- Poem for Two 专属：同步收紧到 -mb-[390px]，保持全页平齐缩小一倍 -->
+    <!-- Poem for Two 专属 -->
     <img 
       v-else
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform -mb-[450px]" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform" 
     />
   </div>
 </div>
