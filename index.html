@@ -71,17 +71,18 @@
         </div>
       </div>
 
-<div class="flex-1 overflow-y-auto px-6 pt-2 pb-16 grid grid-cols-4 gap-x-3 items-start no-scrollbar">
+<!-- 在外层网格加入 grid-auto-rows-[180px] 直接限制每一排的物理行高 -->
+<div class="flex-1 overflow-y-auto px-6 pt-2 pb-16 grid grid-cols-4 grid-auto-rows-[180px] gap-x-3 items-start no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
       'polaroid-png cursor-pointer flex items-start justify-center relative overflow-visible',
-      poem.span === 2 ? 'col-span-2 -mb-[240px]' : 'col-span-1 -mb-[140px]'
+      poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
-    <!-- 普通单列卡片 -->
+    <!-- 普通单列卡片：不再需要任何 -mb 负边距 -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
@@ -89,7 +90,7 @@
       class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform" 
     />
 
-    <!-- Poem for Two 专属 -->
+    <!-- Poem for Two 专属：同样不需要 -mb -->
     <img 
       v-else
       :src="poem.image" 
