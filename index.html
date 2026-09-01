@@ -77,25 +77,24 @@
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
-      /* 保持 overflow-visible 保证头部挂件和拍立得框完整不被裁剪 */
       'polaroid-png cursor-pointer flex items-start justify-center relative overflow-visible',
       poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
-    <!-- 普通单列卡片：使用 -mb-40 强行把多余透明底拉近，行间距瞬间收紧 -->
+    <!-- 普通单列卡片：-mb-14 保持紧凑且绝不重叠 -->
     <img 
       v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform -mb-48" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform -mb-14" 
     />
 
-    <!-- Poem for Two 专属：适配单列的 -mb-40，将负边距设为 -mb-64 锁定联动 -->
+    <!-- Poem for Two 专属：-mb-25 锁定 2-3 排，完美与其他排平齐 -->
     <img 
       v-else
       :src="poem.image" 
       :alt="poem.title" 
-      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform -mb-76" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform -mb-25" 
     />
   </div>
 </div>
