@@ -71,29 +71,39 @@
         </div>
       </div>
 
-<!-- 给容器加上 overflow-hidden，彻底防止异常组件/图片破坏行高 -->
-<div class="flex-1 overflow-y-auto px-6 pt-6 pb-16 flex flex-wrap justify-between items-start gap-y-5 no-scrollbar">
+<!-- 
+  1. 使用 grid grid-cols-4 锁定 4 列
+  2. 关键：items-start (顶部对齐)，彻底防止插花/挂件向上撑开第 3-4 排的间距
+  3. gap-y-5 控制你满意的上下垂直间距
+-->
+<div class="flex-1 overflow-y-auto px-6 pt-8 pb-16 grid grid-cols-4 gap-x-3 gap-y-5 items-start no-scrollbar">
   <div 
     v-for="poem in filteredPoems" 
     :key="poem.id"
     @click="openModal(poem)"
     :class="[
-      /* 使用 flex items-start 顶部对齐，限制 h-[175px] 固定盒尺寸，溢出裁剪防止占位图拉高 */
-      'polaroid-png cursor-pointer flex items-start justify-center relative overflow-hidden h-[175px]',
-      poem.span === 2 ? 'w-[34%]' : 'w-[22.5%]'
+      'polaroid-png cursor-pointer flex items-start justify-center relative overflow-visible',
+      poem.span === 2 ? 'col-span-2' : 'col-span-1'
     ]"
   >
+    <!-- 普通单列卡片：origin-top 搭配 top 对齐 -->
     <img 
+      v-if="poem.span !== 2"
       :src="poem.image" 
       :alt="poem.title" 
       class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-125 origin-top transform" 
     />
-  </div>
 
-  <!-- 隐形占位块，确保最后一排宽度分配准确 -->
-  <div class="w-[22.5%] h-0 pointer-events-none aria-hidden"></div>
-  <div class="w-[22.5%] h-0 pointer-events-none aria-hidden"></div>
+    <!-- Poem for Two 专属卡片 -->
+    <img 
+      v-else
+      :src="poem.image" 
+      :alt="poem.title" 
+      class="w-full h-auto block drop-shadow-md select-none pointer-events-none scale-[0.88] origin-top transform" 
+    />
+  </div>
 </div>
+      
       <!-- 分类抽屉 (Filter) -->
       <div v-if="isFilterOpen" class="absolute inset-0 bg-black/60 z-30" @click="isFilterOpen = false"></div>
       <div v-if="isFilterOpen" class="absolute bottom-0 left-0 right-0 bg-[#1a1a1a] text-white z-40 rounded-t-2xl p-5 border-t border-[#c8aa6e]/30 max-h-[75vh] flex flex-col">
